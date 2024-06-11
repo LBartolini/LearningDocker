@@ -1,5 +1,5 @@
-FROM ubuntu:latest
-RUN apt update && apt install -y python3.12 python3-pip git
+FROM python:3.12-slim
+RUN apt update && apt install -y git
 WORKDIR /usr/local/src
 RUN git clone https://github.com/LBartolini/LearningDocker.git
 WORKDIR /usr/local/src/LearningDocker
