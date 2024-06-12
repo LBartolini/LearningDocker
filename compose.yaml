@@ -1,16 +1,24 @@
 services:
   web:
     build: .
+    restart: always
     ports:
       - 5000:5000
+    depends_on:
+      - db
+    develop:
+      watch:
+        - action: sync+restart
+          path: src
+          target: /LearningDocker/src
 
   db:
     image: mariadb
     restart: always
-    volumes:
-      - db-data:/var/lib/mysql
     environment:
       MARIADB_ROOT_PASSWORD: admin
+    ports:
+      - 3306:3306
 
   adminer:
     image: adminer
