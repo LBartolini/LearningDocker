@@ -2,4 +2,18 @@ services:
   web:
     build: .
     ports:
-      - "5000:5000"
+      - 5000:5000
+
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: admin
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
