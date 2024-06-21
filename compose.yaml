@@ -1,16 +1,12 @@
 services:
   web:
-    build: .
+    build: web
     restart: always
     ports:
       - 5000:5000
-    depends_on:
-      - db
-    develop:
-      watch:
-        - action: sync+restart
-          path: src
-          target: /LearningDocker/src
+    networks:
+      net:
+        ipv4_address: 172.29.0.5
 
   db:
     image: mariadb
@@ -19,9 +15,15 @@ services:
       MARIADB_ROOT_PASSWORD: admin
     volumes:
       - ./db-data:/var/lib/mysql
+    networks:
+      net:
+        ipv4_address: 172.29.0.6
 
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+networks:
+  net:
+    external: false
+    name: net
+    ipam:
+      config:
+        - subnet: 172.29.0.0/24
+          gateway: 172.29.0.1
