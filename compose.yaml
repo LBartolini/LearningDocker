@@ -1,39 +1,38 @@
 services:
-  web:
-    build: web
-    restart: always
-    ports:
-      - 5000:5000
-    networks:
-      net:
-        ipv4_address: 172.29.0.5
+  #alpine:
+  #  image: alpine
+  #  command: tail -F anything
+  #  networks:
+  #    office:
 
-  db:
-    image: mariadb
-    restart: always
-    environment:
-      MARIADB_ROOT_PASSWORD: admin
+  router:
+    image: gabibbo97/lidite-openwrt
     volumes:
-      - ./db/setup.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./db/db-data:/var/lib/mysql
+      - ./router_config/bgpd.conf:/etc/quagga/bgpd.conf
+      - ./router_config/network:/etc/uci-defaults/50_chassis_network
+      - ./router_config/firewall:/etc/uci-defaults/60_chassis_firewall
+      - ./router_config/firewall.user:/etc/firewall.user
+    privileged: true
+    environment:
+      PASSWORD_DEFAULT: admin123
     networks:
-      net:
-        ipv4_address: 172.29.0.6
-  
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-    networks:
-      net:
-        ipv4_address: 172.29.0.7
+      office:
+        ipv4_address: 172.29.0.1
+      internet:
+        ipv4_address: 172.30.0.2
 
 networks:
-  net:
-    external: false
-    name: net
+  office:
+    internal: true
+    name: office
+    driver: macvlan
     ipam:
       config:
         - subnet: 172.29.0.0/24
-          gateway: 172.29.0.1
+  
+  internet:
+    name: internet
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/24
