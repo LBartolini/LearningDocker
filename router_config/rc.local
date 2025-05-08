@@ -4,6 +4,4 @@ iptables -L > /dev/null
 
 /etc/init.d/firewall restart
 
-touch /.started
-
 exit 0
