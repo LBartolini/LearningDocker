@@ -70,10 +70,8 @@ uci -q batch <<-EOF >/dev/null
   commit firewall
 EOF
 
-iptables -L > /dev/null
+touch /.started
 
-/etc/init.d/firewall reload
-  
 exit 0
 
 
