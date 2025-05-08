@@ -7,7 +7,6 @@ services:
     cap_add:
       - NET_ADMIN
     entrypoint: sh -c " 
-      ip route del default; \ 
       ip route add default via 172.29.0.1 && \ 
       tail -f /dev/null "
     networks:
@@ -22,7 +21,6 @@ services:
     cap_add:
       - NET_ADMIN
     entrypoint: sh -c " 
-      ip route del default; \ 
       ip route add default via 172.28.0.1 && \ 
       tail -f /dev/null "
     networks:
@@ -35,7 +33,6 @@ services:
     volumes:
       - ./router_config/bgpd.conf:/etc/quagga/bgpd.conf
       - ./router_config/init.sh:/etc/uci-defaults/init.sh
-      - ./router_config/rc.local:/etc/rc.local
       - ./router_config/firewall.user:/etc/firewall.user
     healthcheck:
       test: test -e /.started && (ping -c 4 8.8.8.8 > /dev/null 2>&1 || exit 1)
