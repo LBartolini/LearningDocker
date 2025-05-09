@@ -51,7 +51,7 @@ done
 uci commit
 
 uci -q batch <<-EOF >/dev/null
-  #set firewall.@include[0].reload='1'
+  set firewall.@include[0].reload='1'
   
   add firewall zone   
   set firewall.@zone[-1]=zone

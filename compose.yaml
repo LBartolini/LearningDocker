@@ -9,6 +9,8 @@ services:
     entrypoint: sh -c " 
       ip route add default via 172.29.0.1 && \ 
       tail -f /dev/null "
+    dns:
+      - "8.8.8.8"
     networks:
       office:
         ipv4_address: 172.29.0.2
@@ -23,12 +25,14 @@ services:
     entrypoint: sh -c " 
       ip route add default via 172.28.0.1 && \ 
       tail -f /dev/null "
+    dns:
+      - "8.8.8.8"
     networks:
       factory:
         ipv4_address: 172.28.0.2
 
   router:
-    image: openwrt
+    build: .
     restart: unless-stopped
     volumes:
       - ./router_config/bgpd.conf:/etc/quagga/bgpd.conf
